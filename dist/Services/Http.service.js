@@ -26,5 +26,10 @@ var $$Http = (function () {
             return response.json();
         });
     };
+    $$Http.options = function (url) {
+        return fetch(new Request(url), { method: 'OPTIONS' }).then(function (response) {
+            return response.json();
+        });
+    };
     return $$Http;
 }());

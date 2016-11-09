@@ -24,4 +24,10 @@ class $$Http {
       return response.json();
     });
   }
+
+  static options(url) {
+    return fetch(new Request(url), { method: 'OPTIONS' }).then(function(response) {
+      return response.json();
+    });
+  }
 }
