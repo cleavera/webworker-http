@@ -2,7 +2,7 @@ export declare class $Blob {
     private _url;
     blob: Blob;
     constructor(blob: Blob);
-    encode(): any;
+    encode(): Promise<{}>;
     getURL(): string;
     remove(): void;
     static fromString(str: string): $Blob;

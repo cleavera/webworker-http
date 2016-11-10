@@ -1,5 +1,6 @@
 "use strict";
 var WebWorker_service_1 = require('./WebWorker.service');
+var JSONResponse_service_1 = require("./JSONResponse.service");
 var Http = (function () {
     function Http() {
     }
@@ -23,12 +24,12 @@ var $$Http = (function () {
     }
     $$Http.getJSON = function (url) {
         return fetch(new Request(url)).then(function (response) {
-            return response.json();
+            return new JSONResponse_service_1.JSONResponse(response);
         });
     };
     $$Http.options = function (url) {
         return fetch(new Request(url), { method: 'OPTIONS' }).then(function (response) {
-            return response.json();
+            return new JSONResponse_service_1.JSONResponse(response);
         });
     };
     return $$Http;

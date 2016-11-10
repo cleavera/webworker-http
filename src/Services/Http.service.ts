@@ -1,4 +1,5 @@
 import {$WebWorker} from './WebWorker.service';
+import {JSONResponse} from "./JSONResponse.service";
 
 export class Http {
   static getHttpWorker() {
@@ -21,13 +22,13 @@ export class Http {
 class $$Http {
   static getJSON(url) {
     return fetch(new Request(url)).then(function(response) {
-      return response.json();
+      return new JSONResponse(response);
     });
   }
 
   static options(url) {
     return fetch(new Request(url), { method: 'OPTIONS' }).then(function(response) {
-      return response.json();
+      return new JSONResponse(response);
     });
   }
 }

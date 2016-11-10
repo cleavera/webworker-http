@@ -1,6 +1,6 @@
 {
   "name": "webworker-http",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Allows ajax calls through a web worker",
   "main": "dist/index.js",
   "scripts": {
