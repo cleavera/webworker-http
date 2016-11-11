@@ -1,4 +1,6 @@
 import {$WebWorker} from './WebWorker.service';
+import {IHttp} from '../Interfaces/IHttp.interface'
+import {IHttpResponse} from '../Interfaces/IHttpResponse.interface'
 
 export class Http {
   static getHttpWorker(): IHttp {

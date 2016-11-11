@@ -1,4 +1,6 @@
-interface IHttp {
+import {IHttpResponse} from "./IHttpResponse.interface";
+
+export interface IHttp {
     getJSON(url): Promise<IHttpResponse>;
 
     options(url): Promise<IHttpResponse>;
