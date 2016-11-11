@@ -1,7 +1,7 @@
 import {$WebWorker} from './WebWorker.service';
 
 export class Http {
-  static getHttpWorker() {
+  static getHttpWorker(): IHttp {
     if (!window.$AnthonyCleaver) {
       window.$AnthonyCleaver = {};
     }
@@ -19,7 +19,7 @@ export class Http {
 }
 
 class $$Http {
-  static _parseHeaders(headers: Headers) {
+  static _parseHeaders(headers: Headers): any {
     let out = {},
         headerEntries = headers.entries(),
         header = headerEntries.next();
@@ -32,29 +32,29 @@ class $$Http {
     return out;
   }
 
-  static _parseResponse(response: Response) {
+  static _parseResponse(response: Response): Promise<IHttpResponse> {
     return response.json().then(body => {
       return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
     });
   }
 
-  static getJSON(url) {
+  static getJSON(url): Promise<IHttpResponse> {
     return fetch(new Request(url)).then(response => this._parseResponse(response));
   }
 
-  static options(url) {
+  static options(url): Promise<IHttpResponse> {
     return fetch(new Request(url), { method: 'OPTIONS' }).then(response => this._parseResponse(response));
   }
 
-  static remove(url) {
+  static remove(url): Promise<IHttpResponse> {
     return fetch(new Request(url), { method: 'DELETE' }).then(response => this._parseResponse(response));
   }
 
-  static post(url, body) {
+  static post(url, body): Promise<IHttpResponse> {
     return fetch(new Request(url), { method: 'POST', body: body }).then(response => this._parseResponse(response));
   }
 
-  static put(url, body) {
+  static put(url, body): Promise<IHttpResponse> {
     return fetch(new Request(url), { method: 'PUT', body: body }).then(response => this._parseResponse(response));
   }
 }
