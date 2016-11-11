@@ -20,10 +20,13 @@ export class Http {
 
 class $$Http {
   static _parseHeaders(headers: Headers) {
-    let out = {};
+    let out = {},
+        headerEntries = headers.entries(),
+        header = headerEntries.next();
 
-    for (let pair of headers.entries()) {
-      out[pair[0]] = pair[1];
+    while(!header.done) {
+      out[header.value[0]] = header.value[1];
+      header = headerEntries.next();
     }
 
     return out;

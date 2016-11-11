@@ -22,10 +22,10 @@ var $$Http = (function () {
     function $$Http() {
     }
     $$Http._parseHeaders = function (headers) {
-        var out = {};
-        for (var _i = 0, _a = headers.entries(); _i < _a.length; _i++) {
-            var pair = _a[_i];
-            out[pair[0]] = pair[1];
+        var out = {}, headerEntries = headers.entries(), header = headerEntries.next(), i = 0;
+        while (!header.done) {
+            out[header.value[0]] = header.value[1];
+            header = headerEntries.next();
         }
         return out;
     };
