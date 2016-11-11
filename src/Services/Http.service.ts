@@ -32,19 +32,29 @@ class $$Http {
     return out;
   }
 
-  static getJSON(url) {
-    return fetch(new Request(url)).then(response => {
-      return response.json().then(body => {
-        return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
-      });
+  static _parseResponse(response: Response) {
+    return response.json().then(body => {
+      return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
     });
   }
 
+  static getJSON(url) {
+    return fetch(new Request(url)).then(response => this._parseResponse(response));
+  }
+
   static options(url) {
-    return fetch(new Request(url), { method: 'OPTIONS' }).then(response => {
-      return response.json().then(body => {
-        return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
-      });
-    });
+    return fetch(new Request(url), { method: 'OPTIONS' }).then(response => this._parseResponse(response));
+  }
+
+  static remove(url) {
+    return fetch(new Request(url), { method: 'DELETE' }).then(response => this._parseResponse(response));
+  }
+
+  static post(url, body) {
+    return fetch(new Request(url), { method: 'POST', body: body }).then(response => this._parseResponse(response));
+  }
+
+  static put(url, body) {
+    return fetch(new Request(url), { method: 'PUT', body: body }).then(response => this._parseResponse(response));
   }
 }

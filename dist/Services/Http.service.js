@@ -22,28 +22,38 @@ var $$Http = (function () {
     function $$Http() {
     }
     $$Http._parseHeaders = function (headers) {
-        var out = {}, headerEntries = headers.entries(), header = headerEntries.next(), i = 0;
+        var out = {}, headerEntries = headers.entries(), header = headerEntries.next();
         while (!header.done) {
             out[header.value[0]] = header.value[1];
             header = headerEntries.next();
         }
         return out;
     };
+    $$Http._parseResponse = function (response) {
+        var _this = this;
+        return response.json().then(function (body) {
+            return { status: response.status, body: body, headers: _this._parseHeaders(response.headers) };
+        });
+    };
     $$Http.getJSON = function (url) {
         var _this = this;
-        return fetch(new Request(url)).then(function (response) {
-            return response.json().then(function (body) {
-                return { status: response.status, body: body, headers: _this._parseHeaders(response.headers) };
-            });
-        });
+        return fetch(new Request(url)).then(function (response) { return _this._parseResponse(response); });
     };
     $$Http.options = function (url) {
         var _this = this;
-        return fetch(new Request(url), { method: 'OPTIONS' }).then(function (response) {
-            return response.json().then(function (body) {
-                return { status: response.status, body: body, headers: _this._parseHeaders(response.headers) };
-            });
-        });
+        return fetch(new Request(url), { method: 'OPTIONS' }).then(function (response) { return _this._parseResponse(response); });
+    };
+    $$Http.remove = function (url) {
+        var _this = this;
+        return fetch(new Request(url), { method: 'DELETE' }).then(function (response) { return _this._parseResponse(response); });
+    };
+    $$Http.post = function (url, body) {
+        var _this = this;
+        return fetch(new Request(url), { method: 'POST', body: body }).then(function (response) { return _this._parseResponse(response); });
+    };
+    $$Http.put = function (url, body) {
+        var _this = this;
+        return fetch(new Request(url), { method: 'PUT', body: body }).then(function (response) { return _this._parseResponse(response); });
     };
     return $$Http;
 }());
