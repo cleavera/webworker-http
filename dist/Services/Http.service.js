@@ -71,7 +71,9 @@ var $$Http = (function () {
     };
     $$Http.put = function (url, body) {
         var _this = this;
-        return fetch(this._createRequest(url, 'PUT', body)).then(function (response) { return _this._parseResponse(response); });
+        return fetch(this._createRequest(url, 'PUT', body)).then(function (response) {
+            return { status: response.status, headers: _this._parseHeaders(response.headers) };
+        });
     };
     return $$Http;
 }());

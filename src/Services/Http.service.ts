@@ -76,6 +76,8 @@ class $$Http {
   }
 
   static put(url, body): Promise<IHttpResponse> {
-    return fetch(this._createRequest(url, 'PUT', body)).then(response => this._parseResponse(response));
+    return fetch(this._createRequest(url, 'PUT', body)).then(response => {
+        return { status: response.status, headers: this._parseHeaders(response.headers) }
+    });
   }
 }
