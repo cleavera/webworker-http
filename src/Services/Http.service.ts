@@ -40,23 +40,42 @@ class $$Http {
     });
   }
 
+  static _createRequest(url: string, method: string = 'GET', body?: any): Request {
+    if (body) {
+      return new Request(url, {
+        method: method,
+        body: JSON.stringify(body),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      });
+    }
+
+    return new Request(url, {
+      method: method,
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
   static getJSON(url): Promise<IHttpResponse> {
-    return fetch(new Request(url)).then(response => this._parseResponse(response));
+    return fetch(this._createRequest(url)).then(response => this._parseResponse(response));
   }
 
   static options(url): Promise<IHttpResponse> {
-    return fetch(new Request(url), { method: 'OPTIONS' }).then(response => this._parseResponse(response));
+    return fetch(this._createRequest(url, 'OPTIONS')).then(response => this._parseResponse(response));
   }
 
   static remove(url): Promise<IHttpResponse> {
-    return fetch(new Request(url), { method: 'DELETE' }).then(response => this._parseResponse(response));
+    return fetch(this._createRequest(url, 'DELETE')).then(response => this._parseResponse(response));
   }
 
   static post(url, body): Promise<IHttpResponse> {
-    return fetch(new Request(url), { method: 'POST', body: body }).then(response => this._parseResponse(response));
+    return fetch(this._createRequest(url, 'POST', body)).then(response => this._parseResponse(response));
   }
 
   static put(url, body): Promise<IHttpResponse> {
-    return fetch(new Request(url), { method: 'PUT', body: body }).then(response => this._parseResponse(response));
+    return fetch(this._createRequest(url, 'PUT', body)).then(response => this._parseResponse(response));
   }
 }
