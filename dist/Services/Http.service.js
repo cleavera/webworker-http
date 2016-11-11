@@ -1,6 +1,5 @@
 "use strict";
 var WebWorker_service_1 = require('./WebWorker.service');
-var JSONResponse_service_1 = require("./JSONResponse.service");
 var Http = (function () {
     function Http() {
     }
@@ -22,14 +21,28 @@ exports.Http = Http;
 var $$Http = (function () {
     function $$Http() {
     }
+    $$Http._parseHeaders = function (headers) {
+        var out = {};
+        for (var _i = 0, _a = headers.entries(); _i < _a.length; _i++) {
+            var pair = _a[_i];
+            out[pair[0]] = pair[1];
+        }
+        return out;
+    };
     $$Http.getJSON = function (url) {
+        var _this = this;
         return fetch(new Request(url)).then(function (response) {
-            return new JSONResponse_service_1.JSONResponse(response);
+            return response.json().then(function (body) {
+                return { status: response.status, body: body, headers: _this._parseHeaders(response.headers) };
+            });
         });
     };
     $$Http.options = function (url) {
+        var _this = this;
         return fetch(new Request(url), { method: 'OPTIONS' }).then(function (response) {
-            return new JSONResponse_service_1.JSONResponse(response);
+            return response.json().then(function (body) {
+                return { status: response.status, body: body, headers: _this._parseHeaders(response.headers) };
+            });
         });
     };
     return $$Http;

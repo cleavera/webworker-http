@@ -1,5 +1,4 @@
 import {$WebWorker} from './WebWorker.service';
-import {JSONResponse} from "./JSONResponse.service";
 
 export class Http {
   static getHttpWorker() {
@@ -20,15 +19,29 @@ export class Http {
 }
 
 class $$Http {
+  static _parseHeaders(headers: Headers) {
+    let out = {};
+
+    for (let pair of headers.entries()) {
+      out[pair[0]] = pair[1];
+    }
+
+    return out;
+  }
+
   static getJSON(url) {
-    return fetch(new Request(url)).then(function(response) {
-      return new JSONResponse(response);
+    return fetch(new Request(url)).then(response => {
+      return response.json().then(body => {
+        return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
+      });
     });
   }
 
   static options(url) {
-    return fetch(new Request(url), { method: 'OPTIONS' }).then(function(response) {
-      return new JSONResponse(response);
+    return fetch(new Request(url), { method: 'OPTIONS' }).then(response => {
+      return response.json().then(body => {
+        return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
+      });
     });
   }
 }
