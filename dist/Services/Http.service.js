@@ -63,7 +63,9 @@ var $$Http = (function () {
     };
     $$Http.remove = function (url) {
         var _this = this;
-        return fetch(this._createRequest(url, 'DELETE')).then(function (response) { return _this._parseResponse(response); });
+        return fetch(this._createRequest(url, 'DELETE')).then(function (response) {
+            return { status: response.status, headers: _this._parseHeaders(response.headers) };
+        });
     };
     $$Http.post = function (url, body) {
         var _this = this;
@@ -71,9 +73,7 @@ var $$Http = (function () {
     };
     $$Http.put = function (url, body) {
         var _this = this;
-        return fetch(this._createRequest(url, 'PUT', body)).then(function (response) {
-            return { status: response.status, headers: _this._parseHeaders(response.headers) };
-        });
+        return fetch(this._createRequest(url, 'PUT', body)).then(function (response) { return _this._parseResponse(response); });
     };
     return $$Http;
 }());
