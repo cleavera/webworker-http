@@ -1,1 +1,1 @@
-export declare function $fetch(url: any): any;
+export declare function $fetch(url: string, headers?: any): any;

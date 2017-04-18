@@ -8,8 +8,8 @@ function appendLocalHost(url) {
   return window.location.protocol + '//' + window.location.host + url;
 }
 
-export function $fetch(url) {
+export function $fetch(url: string, headers?: any) {
   let httpWorker: any = Http.getHttpWorker();
 
-  return httpWorker.getJSON(appendLocalHost(url));
+  return httpWorker.getJSON(appendLocalHost(url), headers);
 }

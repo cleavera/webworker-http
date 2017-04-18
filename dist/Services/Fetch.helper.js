@@ -6,8 +6,8 @@ function appendLocalHost(url) {
     }
     return window.location.protocol + '//' + window.location.host + url;
 }
-function $fetch(url) {
+function $fetch(url, headers) {
     var httpWorker = Http_service_1.Http.getHttpWorker();
-    return httpWorker.getJSON(appendLocalHost(url));
+    return httpWorker.getJSON(appendLocalHost(url), headers);
 }
 exports.$fetch = $fetch;

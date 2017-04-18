@@ -47,44 +47,44 @@ class $$Http {
     });
   }
 
-  static _createRequest(url: string, method: string = 'GET', body?: any): Request {
+  static _createRequest(url: string, method: string = 'GET', headers: any = {}, body?: any): Request {
+    if (!('Content-Type' in headers)) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     if (body) {
       return new Request(url, {
         method: method,
         body: JSON.stringify(body),
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
+        headers: new Headers(headers)
       });
     }
 
     return new Request(url, {
       method: method,
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
+      headers: new Headers(headers)
     });
   }
 
-  static getJSON(url): Promise<IHttpResponse> {
-    return fetch(this._createRequest(url)).then(response => this._parseResponse(response));
+  static getJSON(url, headers?: any): Promise<IHttpResponse> {
+    return fetch(this._createRequest(url, 'GET', headers)).then(response => this._parseResponse(response));
   }
 
-  static options(url): Promise<IHttpResponse> {
-    return fetch(this._createRequest(url, 'OPTIONS')).then(response => this._parseResponse(response));
+  static options(url, headers?: any): Promise<IHttpResponse> {
+    return fetch(this._createRequest(url, 'OPTIONS', headers)).then(response => this._parseResponse(response));
   }
 
-  static remove(url): Promise<IHttpResponse> {
-    return fetch(this._createRequest(url, 'DELETE')).then(response => {
+  static remove(url, headers?: any): Promise<IHttpResponse> {
+    return fetch(this._createRequest(url, 'DELETE', headers)).then(response => {
         return { status: response.status, headers: this._parseHeaders(response.headers) }
     });
   }
 
-  static post(url, body): Promise<IHttpResponse> {
-    return fetch(this._createRequest(url, 'POST', body)).then(response => this._parseResponse(response));
+  static post(url, body, headers?: any): Promise<IHttpResponse> {
+    return fetch(this._createRequest(url, 'POST', headers, body)).then(response => this._parseResponse(response));
   }
 
-  static put(url, body): Promise<IHttpResponse> {
-    return fetch(this._createRequest(url, 'PUT', body)).then(response => this._parseResponse(response));
+  static put(url, body, headers?: any): Promise<IHttpResponse> {
+    return fetch(this._createRequest(url, 'PUT', headers, body)).then(response => this._parseResponse(response));
   }
 }

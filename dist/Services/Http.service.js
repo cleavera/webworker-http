@@ -40,45 +40,45 @@ var $$Http = (function () {
             return Promise.reject({ status: response.status, body: body, headers: _this._parseHeaders(response.headers) });
         });
     };
-    $$Http._createRequest = function (url, method, body) {
+    $$Http._createRequest = function (url, method, headers, body) {
         if (method === void 0) { method = 'GET'; }
+        if (headers === void 0) { headers = {}; }
+        if (!('Content-Type' in headers)) {
+            headers['Content-Type'] = 'application/json';
+        }
         if (body) {
             return new Request(url, {
                 method: method,
                 body: JSON.stringify(body),
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                })
+                headers: new Headers(headers)
             });
         }
         return new Request(url, {
             method: method,
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            })
+            headers: new Headers(headers)
         });
     };
-    $$Http.getJSON = function (url) {
+    $$Http.getJSON = function (url, headers) {
         var _this = this;
-        return fetch(this._createRequest(url)).then(function (response) { return _this._parseResponse(response); });
+        return fetch(this._createRequest(url, 'GET', headers)).then(function (response) { return _this._parseResponse(response); });
     };
-    $$Http.options = function (url) {
+    $$Http.options = function (url, headers) {
         var _this = this;
-        return fetch(this._createRequest(url, 'OPTIONS')).then(function (response) { return _this._parseResponse(response); });
+        return fetch(this._createRequest(url, 'OPTIONS', headers)).then(function (response) { return _this._parseResponse(response); });
     };
-    $$Http.remove = function (url) {
+    $$Http.remove = function (url, headers) {
         var _this = this;
-        return fetch(this._createRequest(url, 'DELETE')).then(function (response) {
+        return fetch(this._createRequest(url, 'DELETE', headers)).then(function (response) {
             return { status: response.status, headers: _this._parseHeaders(response.headers) };
         });
     };
-    $$Http.post = function (url, body) {
+    $$Http.post = function (url, body, headers) {
         var _this = this;
-        return fetch(this._createRequest(url, 'POST', body)).then(function (response) { return _this._parseResponse(response); });
+        return fetch(this._createRequest(url, 'POST', headers, body)).then(function (response) { return _this._parseResponse(response); });
     };
-    $$Http.put = function (url, body) {
+    $$Http.put = function (url, body, headers) {
         var _this = this;
-        return fetch(this._createRequest(url, 'PUT', body)).then(function (response) { return _this._parseResponse(response); });
+        return fetch(this._createRequest(url, 'PUT', headers, body)).then(function (response) { return _this._parseResponse(response); });
     };
     return $$Http;
 }());
