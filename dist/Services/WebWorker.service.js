@@ -11,7 +11,12 @@ var $WebWorker = (function () {
         this._promise = {};
         this._worker.onmessage = function (e) {
             var data = e.data;
-            _this._promise[data.callId].resolve(data.result);
+            if (data.success === true) {
+                _this._promise[data.callId].resolve(data.result);
+            }
+            else {
+                _this._promise[data.callId].reject(data.result);
+            }
         };
     }
     $WebWorker.prototype._callMethod = function (methodName) {
@@ -37,7 +42,7 @@ var $WebWorker = (function () {
             workerSource += "_commands['" + name + "'] = " + functions[name].toString() + ";\n";
             _this[name] = Partial_helper_1.$partial(_this._callMethod, name);
         });
-        workerSource += "\n      addEventListener('message', function(e) {\n        var data = e.data;\n\n        Promise.resolve(_commands[data.command].apply(_commands, data.params)).then(function(result) {\n          postMessage({\n            callId: data.callId,\n            result: result\n          });\n        });\n      });";
+        workerSource += "\n      addEventListener('message', function(e) {\n        var data = e.data;\n\n        Promise.resolve(_commands[data.command].apply(_commands, data.params)).then(function(result) {\n          postMessage({\n            callId: data.callId,\n            result: result,\n            success: true\n          });\n        }, function(result) {\n          postMessage({\n            callId: data.callId,\n            result: result,\n            success: false\n          });\n        });\n      });";
         var workerBlob = Blob_service_1.$Blob.fromString(workerSource);
         return {
             blob: workerBlob,

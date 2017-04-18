@@ -17,7 +17,11 @@ export class $WebWorker {
     this._worker.onmessage = e => {
       var data = e.data;
 
-      this._promise[data.callId].resolve(data.result);
+      if (data.success === true) {
+        this._promise[data.callId].resolve(data.result);
+      } else {
+        this._promise[data.callId].reject(data.result);
+      }
     };
   }
 
@@ -51,7 +55,14 @@ export class $WebWorker {
         Promise.resolve(_commands[data.command].apply(_commands, data.params)).then(function(result) {
           postMessage({
             callId: data.callId,
-            result: result
+            result: result,
+            success: true
+          });
+        }, function(result) {
+          postMessage({
+            callId: data.callId,
+            result: result,
+            success: false
           });
         });
       });`;
