@@ -31,8 +31,13 @@ var $$Http = (function () {
     };
     $$Http._parseResponse = function (response) {
         var _this = this;
+        var code = response.status;
+        var isSuccessfulResponse = Math.floor(code / 100) === 2;
         return response.json().then(function (body) {
-            return { status: response.status, body: body, headers: _this._parseHeaders(response.headers) };
+            if (isSuccessfulResponse) {
+                return { status: response.status, body: body, headers: _this._parseHeaders(response.headers) };
+            }
+            return Promise.reject({ status: response.status, body: body, headers: _this._parseHeaders(response.headers) });
         });
     };
     $$Http._createRequest = function (url, method, body) {

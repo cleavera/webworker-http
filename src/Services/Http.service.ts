@@ -35,8 +35,15 @@ class $$Http {
   }
 
   static _parseResponse(response: Response): Promise<IHttpResponse> {
+    let code: number = response.status;
+    let isSuccessfulResponse: boolean = Math.floor(code / 100) === 2;
+
     return response.json().then(body => {
-      return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
+      if (isSuccessfulResponse) {
+        return { status: response.status, body: body, headers: this._parseHeaders(response.headers) };
+      }
+
+      return Promise.reject({ status: response.status, body: body, headers: this._parseHeaders(response.headers) });
     });
   }
 
